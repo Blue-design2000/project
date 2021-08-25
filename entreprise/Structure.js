@@ -1,11 +1,11 @@
 import styles from '../styles'
 import React from 'react';
 import { View } from 'react-native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Profil from './pages/Profil';
 import Commandes from './pages/Commandes';
 import Menu from './pages/Menu'
-const Stack = createNativeStackNavigator();
+const Stack = createBottomTabNavigator();
 const Structure=()=>{
   return (
     <View style={styles.container}>
