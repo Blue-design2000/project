@@ -5,7 +5,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Connexion from './accueil/Connexion';
 import Inscription from './accueil/Inscription';
-import mdpOublie from './accueil/mdpOublie'
+import mdpOublie from './accueil/mdpOublie';
 const Stack = createNativeStackNavigator();
 export default function App() {
   return (
