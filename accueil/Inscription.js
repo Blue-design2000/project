@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import styles from '../styles'
 import { Text, View, TextInput, TouchableOpacity} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import Structure from './profil/structure';
+import Structure from '../entreprise/Structure';
 
 const Inscription=()=> {
 const navigation = useNavigation();
-const[erreur,setErreur]=UseState("")
+const[erreur,setErreur]=useState("")
 const [Infos, Formulaire]=useState({
 Nom_dentreprise : '',
 SIRET :'',
@@ -14,21 +14,19 @@ Email :'',
 Motdepasse :'',
 ConfirmerMDP:''
 });
-validate = (text) => {
+const validate = (text) => {
   console.log(text);
   let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
   if (reg.test(text) === false) {
-    setErreur("cette adresse Email n'est pas valide");
     return false;
   }
   else {
-    this.setState({ email: text })
-    console.log("Email is Correct");
+  return true 
   }
 }
 
   return (
-    <View styles={styles.container}>
+    <View>
       <Text>{erreur}</Text>
       <Text>Inscription</Text>
       <TextInput
@@ -50,7 +48,6 @@ validate = (text) => {
       />
       <TextInput
       value = {Infos.motdepasse}
-      textContentType= "password"
       placeholder = "Mot de passe"
       onChangeText = {(mot)=>{
         Formulaire({...Infos,Motdepasse:mot})
@@ -61,26 +58,30 @@ validate = (text) => {
       value = {Infos.ConfirmerMDP}
       placeholder = "Confirmer le mot de passe"
       onChangeText = {(confirmation)=>Formulaire({...Infos,ConfirmerMDP:confirmation})}
-      onChangeText = {}
       />
       <TouchableOpacity
-      style = {style.button}
-      disabled ={Etat}
-      OnPress={()=>{
-        a = 0
+      onPress={()=>{
+        let a = 0
         if(Infos.Motdepasse != Infos.ConfirmerMDP){
-          setErreur("le mot de passe ne correspond pas à la confirmation"); a+=1}
-        if(Infos.Motdepasse.length < 8){
-          setErreur("le mot de passe doit contenir minimum 8 charactères"); a+=1}
-        if (Infos.Motdepasse.toLowerCase == Infos.Motdepasse){
-          setErreur("le mot de passe doit contenir une majuscule"); a+=1}
-        if (!validate(Infos.Email)){
-          setErreur("l'adresse Email n'est pas valide"); a+=1}
+          setErreur((erreur)=>erreur+"le mot de passe ne correspond pas à la confirmation"); a+=1}
+        if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/.test(Infos.Email)){
+          setErreur((erreur)=>erreur+"l'adresse Email n'est pas valide"); a+=1}
+          if(!/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])([a-zA-Z0-9]{8})$/.test(Infos.Motdepasse)){
+            setErreur((erreur)=>erreur+"le mot de passe doit contenir au moins: 8 caracteres, une majuscule, un chiffre, une minuscule"); a+=1
+          }
+          if(Infos.Nom_dentreprise.length<1){
+            setErreur((erreur)=>erreur+"Veuillez remplir le nom de l'entreprise"); a+=1
+          }
+          if(Infos.SIRET.length<1){
+            setErreur((erreur)=>erreur+"Veuillez remplir le SIRET"); a+=1
+          }
         if (a==0){
+          setErreur((erreur)=>erreur+"bravo")
         navigation.navigate(Structure)}
 
+
       ;}}>
-        <Text>S'Inscrire</Text>
+        <Text>S Inscrire</Text>
       </TouchableOpacity>
     </View>  
     );

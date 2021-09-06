@@ -1,22 +1,24 @@
-import styles from '../styles'
 import React from 'react';
 import { View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Connexion from './accueil/Connexion';
 import Inscription from './accueil/Inscription';
-
+import mdpOublie from './accueil/mdpOublie';
+import styles from './styles';
 const Stack = createNativeStackNavigator();
-export default function App() {
+const App=()=> {
   return (
-    <View style={styles.container}>
+    <View>
     <NavigationContainer>
       <Stack.Navigator>
-      <Stack.Screen name="Connexion" component={Connexion} />
       <Stack.Screen name="Inscription" component={Inscription} />
+      <Stack.Screen name="Connexion" component={Connexion} />
       <Stack.Screen name="mdpOublie" component={mdpOublie} />
       </Stack.Navigator>
-    </NavigationContainer>    </View>
+    </NavigationContainer>    
+    </View>
   );
 }
+export default App
 
