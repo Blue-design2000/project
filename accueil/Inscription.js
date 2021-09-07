@@ -1,8 +1,12 @@
 import React, { useState } from 'react';
 import styles from '../styles'
+<<<<<<< HEAD
 import { Text, View, TextInput, TouchableOpacity} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Structure from '../entreprise/Structure';
+=======
+import { Text, View } from 'react-native';
+>>>>>>> 3812382262c51e900ae3f0c7bf6492a18d922062
 
 const Inscription=()=> {
 const navigation = useNavigation();
