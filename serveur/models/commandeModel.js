@@ -1,4 +1,4 @@
-const sql = require("./db.js");
+const sql = require("../database.js");
 
 // constructor
 const Customer = function(customer) {
@@ -8,7 +8,7 @@ const Customer = function(customer) {
 };
 
 Customer.create = (newCustomer, result) => {
-  sql.query("INSERT INTO customers SET ?", newCustomer, (err, res) => {
+  sql.query("INSERT INTO user SET ?", newCustomer, (err, res) => {
     if (err) {
       console.log("error: ", err);
       result(err, null);
@@ -21,7 +21,8 @@ Customer.create = (newCustomer, result) => {
 };
 
 Customer.findById = (customerId, result) => {
-  sql.query(`SELECT * FROM customers WHERE id = ${customerId}`, (err, res) => {
+    console.log("findbyid",{...customerId})
+  sql.query(`SELECT * FROM user WHERE mail = ${customerId.params.customerId}`, (err, res) => {
     if (err) {
       console.log("error: ", err);
       result(err, null);
@@ -30,11 +31,12 @@ Customer.findById = (customerId, result) => {
 
     if (res.length) {
       console.log("found customer: ", res[0]);
-      result(null, res[0]);
+      result.send(res[0]);
       return;
     }
 
     // not found Customer with the id
-    result({ kind: "not_found" }, null);
+    result.send("not found");
   });
 };
+module.exports = Customer;

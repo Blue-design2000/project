@@ -66,7 +66,7 @@ const validate = (text) => {
           setErreur((erreur)=>erreur+"le mot de passe ne correspond pas à la confirmation"); a+=1}
         if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/.test(Infos.Email)){
           setErreur((erreur)=>erreur+"l'adresse Email n'est pas valide"); a+=1}
-          if(!/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])([a-zA-Z0-9]{8})$/.test(Infos.Motdepasse)){
+          if(!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}/.test(Infos.Motdepasse)){
             setErreur((erreur)=>erreur+"le mot de passe doit contenir au moins: 8 caracteres, une majuscule, un chiffre, une minuscule"); a+=1
           }
           if(Infos.Nom_dentreprise.length<1){
