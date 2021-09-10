@@ -1,9 +1,9 @@
 
     
-    const customers = require("../models/commandeModel.js");
+    const customers = require("../models/menuModel.js");
     const router = require('express').Router();  
     // Create a new Customer
-    router.post("/customers", customers.create);
+    router.get("/add", customers.create);
     // Retrieve a single Customer with customerId
-    router.get("/customers/:customerId", customers.findById);
+    router.get("/get/:userID", customers.findById);
     module.exports = router;

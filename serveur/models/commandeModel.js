@@ -7,36 +7,35 @@ const Customer = function(customer) {
   this.active = customer.active;
 };
 
-Customer.create = (newCustomer, result) => {
-  sql.query("INSERT INTO user SET ?", newCustomer, (err, res) => {
+Customer.create = (req, res) => {
+  sql.query("INSERT INTO user SET ?", req.query, (err, res) => {
     if (err) {
       console.log("error: ", err);
       result(err, null);
       return;
     }
 
-    console.log("created customer: ", { id: res.insertId, ...newCustomer });
-    result(null, { id: res.insertId, ...newCustomer });
+    console.log("created customer: ", { id: res.insertId, data: req.params });
+    result(null, { id: res.insertId, data: req.params });
   });
 };
 
-Customer.findById = (customerId, result) => {
-    console.log("findbyid",{...customerId})
-  sql.query(`SELECT * FROM user WHERE mail = ${customerId.params.customerId}`, (err, res) => {
+Customer.findById = (req, res) => {
+  sql.query(`SELECT * FROM user WHERE mail = ${req.params.customerId}`, (err, response) => {
     if (err) {
       console.log("error: ", err);
-      result(err, null);
+      res.send(err, null);
       return;
     }
 
-    if (res.length) {
-      console.log("found customer: ", res[0]);
-      result.send(res[0]);
+    if (response.length) {
+      console.log("found customer: ", response[0]);
+      res.send(response[0]);
       return;
     }
 
     // not found Customer with the id
-    result.send("not found");
+    res.send("not found");
   });
 };
 module.exports = Customer;
