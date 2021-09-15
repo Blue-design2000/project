@@ -1,21 +1,17 @@
 import React, { useState } from 'react';
 import styles from '../styles'
-<<<<<<< HEAD
 import { Text, View, TextInput, TouchableOpacity} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Structure from '../entreprise/Structure';
-=======
-import { Text, View } from 'react-native';
->>>>>>> 3812382262c51e900ae3f0c7bf6492a18d922062
 
 const Inscription=()=> {
 const navigation = useNavigation();
 const[erreur,setErreur]=useState("")
 const [Infos, Formulaire]=useState({
-Nom_dentreprise : '',
+nom : '',
 SIRET :'',
-Email :'',
-Motdepasse :'',
+mail :'',
+mdp :'',
 ConfirmerMDP:''
 });
 const validate = (text) => {
@@ -34,9 +30,9 @@ const validate = (text) => {
       <Text>{erreur}</Text>
       <Text>Inscription</Text>
       <TextInput
-      value = {Infos.Nom_dentreprise}
+      value = {Infos.nom}
       placeholder = "Nom d'entreprise"
-      onChangeText = {(nom)=>Formulaire({...Infos,Nom_dentreprise:nom})}
+      onChangeText = {(nom)=>Formulaire({...Infos,nom:nom})}
       />
       <TextInput
       value = {Infos.SIRET}
@@ -48,13 +44,13 @@ const validate = (text) => {
       value = {Infos.Email}
       placeholder = "Email"
       keyboardType = "email-address"
-      onChangeText = {(mail)=>Formulaire({...Infos,Email:mail})}
+      onChangeText = {(mail)=>Formulaire({...Infos,mail:mail})}
       />
       <TextInput
-      value = {Infos.motdepasse}
+      value = {Infos.mdp}
       placeholder = "Mot de passe"
       onChangeText = {(mot)=>{
-        Formulaire({...Infos,Motdepasse:mot})
+        Formulaire({...Infos,mdp:mot})
         }}/>
       
       
@@ -66,14 +62,14 @@ const validate = (text) => {
       <TouchableOpacity
       onPress={()=>{
         let a = 0
-        if(Infos.Motdepasse != Infos.ConfirmerMDP){
+        if(Infos.mdp != Infos.ConfirmerMDP){
           setErreur((erreur)=>erreur+"le mot de passe ne correspond pas à la confirmation"); a+=1}
-        if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/.test(Infos.Email)){
+        if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/.test(Infos.mail)){
           setErreur((erreur)=>erreur+"l'adresse Email n'est pas valide"); a+=1}
-          if(!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}/.test(Infos.Motdepasse)){
+          if(!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}/.test(Infos.mdp)){
             setErreur((erreur)=>erreur+"le mot de passe doit contenir au moins: 8 caracteres, une majuscule, un chiffre, une minuscule"); a+=1
           }
-          if(Infos.Nom_dentreprise.length<1){
+          if(Infos.nom.length<1){
             setErreur((erreur)=>erreur+"Veuillez remplir le nom de l'entreprise"); a+=1
           }
           if(Infos.SIRET.length<1){
