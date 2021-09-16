@@ -2,22 +2,29 @@
 const port = 3000;
 const express = require('express');
 const bodyParser = require("body-parser");
-
+const cors = require("cors")
 const app = express();
-// parse requests of content-type: application/json
-app.use(bodyParser.json());
-// parse requests of content-type: application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: true }));
 const accueilRouter = require('./routers/accueilRouter');
 const menuRouter = require('./routers/menuRouter');
 const profilRouter = require('./routers/profilRouter');
 const commandeRouter = require('./routers/commandeRouter');
+
+// parse requests of content-type: application/json
+app.use(cors({
+  origin: '*'
+}));
+app.use(bodyParser.json());
+// parse requests of content-type: application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: true }));
+
 app.use('/accueil', accueilRouter);
 app.use('/menu', menuRouter);
 app.use('/profil', profilRouter);
 app.use('/commande', commandeRouter);
+
 app.get("/", (req, res) => {
-    res.json({ message: "Welcome to bezkoder application." });
+    console.log("coucou")
+    res.send({ message: "Welcome to bezkoder application." });
   });
   
 app.listen(port, () => {

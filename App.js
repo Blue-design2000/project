@@ -13,8 +13,8 @@ const App=()=> {
     <View>
     <NavigationContainer>
       <Stack.Navigator>
-      <Stack.Screen name="Inscription" component={Inscription} />
       <Stack.Screen name="Connexion" component={Connexion} />
+      <Stack.Screen name="Inscription" component={Inscription} />
       <Stack.Screen name="mdpOublie" component={mdpOublie} />
       <Stack.Screen name="Structure" component={Structure} />
       

@@ -2,9 +2,11 @@ import React, { useState } from 'react';
 import styles from '../styles'
 import { Text, View, TextInput, TouchableOpacity} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import Structure from '../entreprise/Structure';
+import axios from "axios";
+import { SHA3 } from 'sha3';
 
 const Inscription=()=> {
+const hash = new SHA3(512);
 const navigation = useNavigation();
 const[erreur,setErreur]=useState("")
 const [Infos, Formulaire]=useState({
@@ -60,7 +62,7 @@ const validate = (text) => {
       onChangeText = {(confirmation)=>Formulaire({...Infos,ConfirmerMDP:confirmation})}
       />
       <TouchableOpacity
-      onPress={()=>{
+      onPress={async ()=>{
         let a = 0
         if(Infos.mdp != Infos.ConfirmerMDP){
           setErreur((erreur)=>erreur+"le mot de passe ne correspond pas à la confirmation"); a+=1}
@@ -76,12 +78,20 @@ const validate = (text) => {
             setErreur((erreur)=>erreur+"Veuillez remplir le SIRET"); a+=1
           }
         if (a==0){
-          setErreur((erreur)=>erreur+"bravo")
-        navigation.navigate(Structure)}
-
+          hash.reset()
+          hash.update(Infos.mdp)
+          let hmdp=hash.digest('hex')
+          hash.reset()
+          hash.update(Infos.ConfirmerMDP)
+          let hmdpc=hash.digest('hex')
+          const {ConfirmerMDP, ...profil} = Infos
+          console.log(profil)
+          await axios.post("http://localhost:3000/accueil/create",{...profil, mdp: hmdp}).then(()=>navigation.navigate("Structure"))
+        }
+        
 
       ;}}>
-        <Text>S Inscrire</Text>
+        <Text>S'inscrire</Text>
       </TouchableOpacity>
     </View>  
     );
