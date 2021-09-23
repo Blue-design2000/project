@@ -8,7 +8,7 @@ import Menu from './pages/Menu'
 const Stack = createMaterialBottomTabNavigator();
 const Structure=()=>{
   return (
-    <View style={styles.container}>
+    <View>
       <Stack.Navigator>
         <Stack.Screen name="Commandes" component={Commandes} />
         <Stack.Screen name="Menu" component={Menu} />

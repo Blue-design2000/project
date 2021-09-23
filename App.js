@@ -7,7 +7,13 @@ import Inscription from './accueil/Inscription';
 import mdpOublie from './accueil/mdpOublie';
 import Structure from './entreprise/Structure';
 import styles from './styles';
+const websocket = require('ws')
+const express = resuire('express')
+const app = express();
+const port = 3000;
 const Stack = createNativeStackNavigator();
+const server = http.createServer(app);
+const sql = require('../database.js')
 const App=()=> {
   return (
     <View>
@@ -23,5 +29,6 @@ const App=()=> {
     </View>
   );
 }
+
 export default App
 

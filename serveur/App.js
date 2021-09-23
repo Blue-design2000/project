@@ -3,6 +3,7 @@ const port = 3000;
 const express = require('express');
 const bodyParser = require("body-parser");
 const cors = require("cors")
+const WebSocket = require('ws');
 const app = express();
 const accueilRouter = require('./routers/accueilRouter');
 const menuRouter = require('./routers/menuRouter');
@@ -21,6 +22,9 @@ app.use('/accueil', accueilRouter);
 app.use('/menu', menuRouter);
 app.use('/profil', profilRouter);
 app.use('/commande', commandeRouter);
+
+const socket = new WebSocket.Server({ server });
+console.log(socket)
 
 app.get("/", (req, res) => {
     console.log("coucou")
