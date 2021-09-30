@@ -15,7 +15,7 @@ const List = (prop/*:PropsList*/) => {
   const Sorties = (props/*: PropsList*/) => {
     const sortie/*:Element[]*/ = [];
     // React.useEffect(() => {
-      console.log(props.node.children.length)
+      console.log(props)
       for (let a = 0; a < props.node.children.length; a += 1) { // pour tous les enfants
         console.log(a);
         const nodeElement = props.node.children[a];

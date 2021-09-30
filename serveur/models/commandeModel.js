@@ -1,8 +1,4 @@
 const sql = require("../database.js");
-const WebSocket = require('ws');
-const http = require('http');
-const wss = new WebSocket.Server({ server });
-
 // constructor
 const Customer = function(customer) {
   this.email = customer.email;
@@ -33,14 +29,6 @@ Customer.create = (req, res) => {
 
 Customer.findById = (req, res) => {
   sql.query(`SELECT * FROM user WHERE mail = ${req.params.customerId}`, (err, response) => {
-    wss.on('connection', function connection(ws) {
-        ws.on('message', function incoming(message) {
-            console.log('received: %s', message);
-            //changement de colonne .query .send? 
-        });
-        ws.send('something from server');
-    });
-    
     if (err) {
       console.log("error: ", err);
       res.send(err, null);

@@ -8,10 +8,5 @@ const Commandes=()=> {
     </View>  
     );
 }
-let socket = new WebSocket("ws://localhost");
-socket.onopen = function(e) {
-  console.log("[open] Connection established");
-  console.log("Sending to server");
-};
 
 export default Commandes;

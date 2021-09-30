@@ -7,14 +7,15 @@ import { SHA3 } from 'sha3';
 import List from "../entreprise/pages/menu/List"
 
 const Connexion=()=> {
-  const [classe, setClasse] = useState({children:[]});
-  const [ajouter,setAjout]=useState({max:0,min:0,name:"",parent:-1})
+  const [classe, setClasse] = useState({tree:{children:[]}});
+  const [ajout,setAjout]=useState({max:0,min:0,name:"",parent:-1})
   const route = useRoute/*<RouteProp<ParamList, 'Detail'>>*/();
   let state/*: State*/;
   let valide = (1 === 1.0);
   let objet/*:MenuRoot|MenuChildCategory|MenuLot*/;
   
-  React.useEffect(() => {
+   React.useEffect(() => {
+    console.log("USE EFFECT")
     axios.get('http://localhost:3000/menu/get/e@e.fr')
       .then((response) => {
         if (route.params === undefined || route.params.menu === undefined) {
@@ -31,13 +32,13 @@ const Connexion=()=> {
         console.log(route);
         console.log(state);
         if (route.params !== undefined && route.params.node !== undefined) {
-          setClasse(route.params.node);
+          setClasse({...classe,tree:route.params.node});
         } else {
-          setClasse(response.data)
+          setClasse({...classe,...response.data})
         }
         console.log(classe)
       });
-  }, []);
+   }, []);
   if (route.params === undefined || route.params.menu === undefined) {
     if (route.params === undefined || route.params.selected === undefined) {
       state = { menu: [], selected: [] };
@@ -114,12 +115,12 @@ const Connexion=()=> {
       <TextInput
       value = {ajout.nom}
       placeholder = "nom"
-      onChangeText = {(nom)=>setAjout({...Infos,nom:nom})}
+      onChangeText = {(nom)=>setAjout({...ajout,nom:nom})}
       />
       <TextInput
       value = {ajout.parent}
       placeholder = "parent"
-      onChangeText = {(parent)=>setAjout({...Infos,parent:parent})}
+      onChangeText = {(parent)=>setAjout({...ajout,parent:parent})}
       />
 
       <TouchableOpacity onPress={async () => {
