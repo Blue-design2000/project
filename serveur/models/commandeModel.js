@@ -1,7 +1,4 @@
 const sql = require("../database.js");
-const WebSocket = require('ws');
-const http = require('http');
-const wss = new WebSocket.Server({ server });
 
 // constructor
 const Customer = function(customer) {
@@ -10,21 +7,23 @@ const Customer = function(customer) {
   this.active = customer.active;
 };
 
-Customer.create = (req, res) => {
+
+
+
+Customer.create = (req, result) => {
   sql.query("INSERT INTO commande SET ?", req.query, (err, res) => {// un insere un nouvel element
     if (err) {
       console.log("error: ", err);
-      result(err, null);
+      res.send(err);
       return;
     }
     sql.query("SELECT * FROM commande", req.query, (err2, res2) => {// on dit a tout le monde qu'on l'a insere 
       if (err) {
         console.log("error: ", err2);
-        result(err, null);
+        result.send(err);
         return;
       }
-      ws.send(res2.data);//on envoie toute la table mise a jour 
-
+      
     console.log("created customer: ", { id: res.insertId, data: req.params });
     result(null, { id: res.insertId, data: req.params });
   });
@@ -32,14 +31,7 @@ Customer.create = (req, res) => {
 };
 
 Customer.findById = (req, res) => {
-  sql.query(`SELECT * FROM user WHERE mail = ${req.params.customerId}`, (err, response) => {
-    wss.on('connection', function connection(ws) {
-        ws.on('message', function incoming(message) {
-            console.log('received: %s', message);
-            //changement de colonne .query .send? 
-        });
-        ws.send('something from server');
-    });
+  sql.query(`SELECT * FROM commande WHERE mail = ${req.params.customerId}`, (err, response) => {
     
     if (err) {
       console.log("error: ", err);
