@@ -8,7 +8,7 @@ const Customer = function(customer) {
   this.active = customer.active;
 };
 
-Customer.create = (req, res) => {
+Customer.createEntreprise = (req, res) => {
   console.log("JE CREE UNE ENTREPRISE")
     const {ConfirmerMdp, ...Infos} = req.body;
   console.log(Infos)
@@ -24,8 +24,24 @@ Customer.create = (req, res) => {
   });
 console.log("FINN")
 };
+Customer.createClient = (req, res) => {
+  console.log("JE CREE UN Client")
+    const {ConfirmerMdp, ...Infos} = req.body;
+  console.log(Infos)
+  sql.query("INSERT INTO client SET ?", Infos, (err, response) => {
+    if (err) {
+      console.log("error: ", err);
+      res.send(err, null);
+      return;
+    }
 
-Customer.connect = (req, res) => {
+    console.log("created customer: ", { id: response.insertId, ...Infos });
+    res.send( { id: response.insertId, ...Infos });
+  });
+console.log("FINN")
+};
+
+Customer.connectEntreprise = (req, res) => {
   let Infos=req.body
     console.log("findbyid",{...Infos})
   sql.query(`SELECT * FROM user WHERE mail = '${Infos.mail}'`, (err, response) => {
@@ -45,4 +61,25 @@ Customer.connect = (req, res) => {
     res.send("not found");
   });
 };
+Customer.connectClient = (req, res) => {
+  let Infos=req.body
+    console.log("findbyid",{...Infos})
+  sql.query(`SELECT * FROM client WHERE mail = '${Infos.mail}'`, (err, response) => {
+    if (err) {
+      console.log("connexion echouée",err);
+      res.send(err);
+      return;
+    }
+    console.log(response.length,response[0].mdp,Infos.mdp,response[0].mdp==Infos.mdp)
+    if (response.length && response[0].mdp==Infos.mdp){
+      console.log("connexion réussie");
+      res.send(response[0]);
+      return;
+    }
+
+    // not found Customer with the id
+    res.send("not found");
+  });
+};
+
 module.exports = Customer;
