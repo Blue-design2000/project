@@ -12,7 +12,8 @@ const sql = require("./database.js");
 const http = require('http');
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
-let id={}
+let socket={}
+idrest={}
 function uniqueID() {
   return Math.floor(Math.random() * Date.now())
   }
@@ -21,16 +22,10 @@ wss.on('connection', function connection(ws) {
     let clairMessage= JSON.parse(message.toString());
     console.log(clairMessage.nature)
     if(clairMessage.nature=="init"){// si c'est le message de connexion on enregistre le restaurant 
-      console.log("coucou69")
-      sql.query('SELECT * FROM commande idrest='+clairMessage.idrest+' and state<3',(err, res)=> {
-        if (err) {
-        console.log("error: ", err);
-        res.send(err);
-        return;
-        }
-      console.log(res.data);
-      ws.send(res.data)})
-      id[clairMessage.uid].append(clairmessage.idrest)
+      sql.query('SELECT * FROM commande WHERE idrest=\''+clairMessage.idrest+'\' and state<3',(err, res)=> {
+        console.log("data",res)
+      ws.send(JSON.stringify({nature:"data",commandes:res}))})
+      idrest[clairMessage.uid]=clairMessage.idrest
     }else if(clairMessage.nature=="etat"){// si il envoie pour changer l'etat on envoie a tous les gens du restau et on change dans la BDD 
       let filtered = Object.fromEntries(Object.entries(id).filter(([k,v]) => v[1]==clairMessage.idrest));// on prend tous les gens qui ont le meme id que l'envoyeur
       Object.keys(filtered).forEach((x)=>id[x][0].send(JSON.toString({nature:"etat",id: clairMessage.id,etat:changeState[+1==clairMessage.etat]+1})))// on envoie le changement a tout le monde
@@ -42,8 +37,8 @@ wss.on('connection', function connection(ws) {
         return;
       }})
     }else if (clairMessage.nature=="add"){// si c'est pour enregistrer un nouveau menu on envoie a tout le monde et dans la bdd 
-      let filtered = Object.fromEntries(Object.entries(id).filter(([k,v]) => v[1]==clairMessage.idrest));
-      Object.keys(filtered).forEach((x)=>id[x][0].send(JSON.toString({nature:"add",string:clairMessage.string})))
+      let filtered = Object.fromEntries(Object.entries(idrest).filter(([k,v]) => v==clairMessage.idrest));
+      Object.keys(filtered).forEach((x)=>socket[x].send(JSON.toString({nature:"add",string:clairMessage.string})))
       sql.query("INSERT INTO commande SET ?",clairMessage.data,(err, res) => {
         if (err) {
         console.log("error: ", err);
@@ -54,7 +49,8 @@ wss.on('connection', function connection(ws) {
     console.log(message.toString())// J ARRIVE PAS A AVOIR ACCES AUX DONNEES 
   });
   let uid=uniqueID()
-  id[uid]=[ws]
+  socket[uid]=ws
+  console.log(Object.keys(socket))
   ws.send("{\"nature\":\"init\",\"id\":"+uid+"}");
 });
 server.listen(port, function(err) {

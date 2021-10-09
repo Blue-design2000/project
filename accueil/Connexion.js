@@ -9,8 +9,8 @@ const Connexion=()=> {
   const hash = new SHA3(512)
   const navigation=useNavigation();
   const [Infos, Formulaire]=useState({
-    mail : 'b@b.fr',
-    mdp :'Test1010*',
+    mail : 'e@e.fr',
+    mdp :'Isabelle101067*',
     });
     
   return (

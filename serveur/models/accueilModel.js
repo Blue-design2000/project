@@ -34,6 +34,7 @@ Customer.connect = (req, res) => {
       res.send(err);
       return;
     }
+    console.log(response[0])
     console.log(response.length,response[0].mdp,Infos.mdp,response[0].mdp==Infos.mdp)
     if (response.length && response[0].mdp==Infos.mdp){
       console.log("connexion réussie");
