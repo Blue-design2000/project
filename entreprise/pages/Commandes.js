@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from '../../styles'
-import { Text, View } from 'react-native';
-//import {ListItem} from 'react-native-elements';
+import { Text, View , TouchableOpacity } from 'react-native';
+import {ListItem} from 'react-native-elements';
 import axios from 'axios';
 const Commandes=()=> {
 const [uid,setUid]=React.useState("")
@@ -10,14 +10,20 @@ const [commandes, setCommandes]=React.useState([[],[],[]])
 ws.onopen = () => {
   // connection opened
   console.log("open")
-  ws.send("{\"nature\":\"init\",idrest:\"e@e.fr\"}")// on envoie l'id du restaurant au serveur 
+  ws.send("{\"nature\":\"init\",\"idrest\":\"b@b.fr\"}")// on envoie l'id du restaurant au serveur 
 };
 
 ws.onmessage = (e) => {
-  let data=e.data
+  let data=JSON.parse(e.data);
   console.log(data)
   // a message was received
-  if(data.nature=="init"){//si on est entrian d'initialiser  
+  console.log(data.nature=='init', data.nature);
+  if(data.nature=="init"){//si on est entrian d'initialiser 
+    console.log("coucou23");
+    let newCommandes=commandes; 
+    data.commandes.map((commande)=>{
+      newCommandes[commande.state].append(commande);})
+      setCommandes(newCommandes);
     setUid(data.uid)// one enrgistre notre uid
   }else if(data.nature=="add"){// si une nouvelle commande est ajoutee
     let newCommandes=commandes// on prend les commandes
@@ -50,28 +56,40 @@ ws.onclose = (e) => {
     <View styles={styles.container}>
       <Text>Commandes</Text>
       {
-    list[0].map((l, i) => (
+    commandes[0].map((l, i) => (
       <ListItem key={i} bottomDivider>
         <ListItem.Content>
           <ListItem.Title>{l.str}</ListItem.Title>
+          <ListItem.Subtitle>
+            <TouchableOpacity onPress={ws.send({nature:"etat",id:l.id,etat:"+1"})}><Text>Monter</Text></TouchableOpacity>
+          <TouchableOpacity onPress={ws.send({nature:"etat",id:l.id,etat:"-1"})}><Text>Descendre</Text></TouchableOpacity>
+          </ListItem.Subtitle>
         </ListItem.Content>
       </ListItem>
     ))
     }
         {
-    list[1].map((l, i) => (
+     commandes[0].map((l, i) => (
       <ListItem key={i} bottomDivider>
         <ListItem.Content>
           <ListItem.Title>{l.str}</ListItem.Title>
+          <ListItem.Subtitle>
+            <TouchableOpacity onPress={ws.send({nature:"etat",id:l.id,etat:"+1"})}><Text>Monter</Text></TouchableOpacity>
+          <TouchableOpacity onPress={ws.send({nature:"etat",id:l.id,etat:"-1"})}><Text>Descendre</Text></TouchableOpacity>
+          </ListItem.Subtitle>
         </ListItem.Content>
       </ListItem>
     ))
     }
         {
-    list[2].map((l, i) => (
+    commandes[0].map((l, i) => (
       <ListItem key={i} bottomDivider>
         <ListItem.Content>
           <ListItem.Title>{l.str}</ListItem.Title>
+          <ListItem.Subtitle>
+            <TouchableOpacity onPress={ws.send({nature:"etat",id:l.id,etat:"+1"})}><Text>Monter</Text></TouchableOpacity>
+          <TouchableOpacity onPress={ws.send({nature:"etat",id:l.id,etat:"-1"})}><Text>Descendre</Text></TouchableOpacity>
+          </ListItem.Subtitle>
         </ListItem.Content>
       </ListItem>
     ))
