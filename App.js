@@ -6,6 +6,7 @@ import Connexion from './accueil/Connexion';
 import Inscription from './accueil/Inscription';
 import mdpOublie from './accueil/mdpOublie';
 import Structure from './entreprise/Structure';
+import Commandes from './entreprise/pages/Commandes';
 import styles from './styles';
 const Stack = createNativeStackNavigator();
 
@@ -15,6 +16,7 @@ const App=()=> {
     <NavigationContainer>
       <Stack.Navigator>
       <Stack.Screen name="Connexion" component={Connexion} />
+      <Stack.Screen name="Commandes" component={Commandes} />
       <Stack.Screen name="Inscription" component={Inscription} />
       <Stack.Screen name="mdpOublie" component={mdpOublie} />
       <Stack.Screen name="Structure" component={Structure} />
