@@ -47,11 +47,11 @@ const Panier =()=>{
     } 
 return (
     <View>
-        <Text>{JSON.stringify(route.params.menu)}</Text>
+        
                 
         {route.params.menu.map((z)=>{Recursive(z[0][1])})}
         {CouscousRoyal()}
-        <Text>{sorties.length}</Text>
+        
     </View>
 )}
 export default Panier;
