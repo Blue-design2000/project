@@ -1,16 +1,21 @@
 import React, { useState } from 'react';
-import { useRoute } from '@react-navigation/native';
-import { Text, View, TouchableOpacity,Alert } from 'react-native';
+import styles from '../styles'
+import { Text, View, TextInput, TouchableOpacity } from 'react-native';
 import axios from "axios";
-import List from "./menu/List"
-const Menu=(props)=> {
-  const [classe, setClasse] = useState({children:[]});
+import { useRoute } from '@react-navigation/native';
+import { SHA3 } from 'sha3';
+import List from "../entreprise/pages/menu/List"
+
+const Connexion=()=> {
+  const [classe, setClasse] = useState({tree:{children:[]}});
+  const [ajout,setAjout]=useState({max:0,min:0,name:"",parent:-1})
   const route = useRoute/*<RouteProp<ParamList, 'Detail'>>*/();
   let state/*: State*/;
   let valide = (1 === 1.0);
   let objet/*:MenuRoot|MenuChildCategory|MenuLot*/;
   
-  React.useEffect(() => {
+   React.useEffect(() => {
+    console.log("USE EFFECT")
     axios.get('http://localhost:3000/menu/get/e@e.fr')
       .then((response) => {
         if (route.params === undefined || route.params.menu === undefined) {
@@ -27,13 +32,13 @@ const Menu=(props)=> {
         console.log(route);
         console.log(state);
         if (route.params !== undefined && route.params.node !== undefined) {
-          setClasse(route.params.node);
+          setClasse({...classe,tree:route.params.node});
         } else {
-          setClasse(response.data)
+          setClasse({...classe,...response.data})
         }
         console.log(classe)
       });
-  }, []);
+   }, []);
   if (route.params === undefined || route.params.menu === undefined) {
     if (route.params === undefined || route.params.selected === undefined) {
       state = { menu: [], selected: [] };
@@ -96,42 +101,36 @@ const Menu=(props)=> {
   console.log(classe)
   return (
     <View>
-      <List node={classe} setData={setData}/>
-      <TouchableOpacity onPress={() => {
-        // console.log('onPress');
-        console.log(classe);
-        if (classe.type === 'menu') {
-          verif(classe);
-        }
-        if (valide && state.menu !== undefined) {
-          state.menu.push(state.selected);
-          // console.log(state.menu);
-          state.selected = [];
-          // menu: state.menu.push(state.selected)
-          // this.setState({ selected: [] }, () => { console.log(`state${state.menu}`); });
-           props.navigation.push('Connexion', { menu: state.menu, selected: [], node: undefined });
-        } else {
-          Alert.alert("vous n'avez pas bien rempli");
-        }
-      }}>
-        <Text>valider le menu</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={() => {
-        console.log(state.menu);
-        props.navigation.navigate('Menu', { menu: state.menu, selected: [] });
-      }}>
-        <Text>voir le menu commande</Text>
-      </TouchableOpacity>
+      <List node={classe.tree} setData={setData}/>
+      <TextInput
+      value = {ajout.max}
+      placeholder = "max"
+      onChangeText = {(max)=>setAjout({...ajout,max:max})}
+      />
+      <TextInput
+      value = {ajout.min}
+      placeholder = "min"
+      onChangeText = {(min)=>setAjout({...ajout,min:min})}
+      />
+      <TextInput
+      value = {ajout.nom}
+      placeholder = "nom"
+      onChangeText = {(nom)=>setAjout({...ajout,nom:nom})}
+      />
+      <TextInput
+      value = {ajout.parent}
+      placeholder = "parent"
+      onChangeText = {(parent)=>setAjout({...ajout,parent:parent})}
+      />
+
       <TouchableOpacity onPress={async () => {
-        console.log(state.menu);
-        await axios.post('localhost/api/commandes/reservation/user', { idReservation: 1, pseudo: 'coucou' })
-          .then((response) => props.navigation.navigate('Commandes', { commandes: response.data }));
-      }}>
-        <Text>voir mes commande</Text>
+        axios.post("localhost:3000/menu/add",{...ajout})}}>
+        <Text>ajouter un menu/produit</Text>
       </TouchableOpacity>
 
        </View>
   );}
 
 
-export default Menu;
+
+export default Connexion;
