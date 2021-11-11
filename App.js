@@ -14,12 +14,10 @@ const App=()=> {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-      <Stack.Screen name="MenuClient" component={MenuClient}/>
       <Stack.Screen name="Connexion" component={Connexion} />
       <Stack.Screen name="Inscription" component={Inscription} />
       <Stack.Screen name="mdpOublie" component={mdpOublie} />
       <Stack.Screen name="Structure" component={Structure} />
-      <Stack.Screen name="Panier" component={Panier} />
       
       </Stack.Navigator>
     </NavigationContainer>    
