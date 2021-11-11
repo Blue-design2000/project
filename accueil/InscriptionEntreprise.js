@@ -86,7 +86,7 @@ const validate = (text) => {
           let hmdpc=hash.digest('hex')
           const {ConfirmerMDP, ...profil} = Infos
           console.log(profil)
-          await axios.post("http://localhost:3000/accueil/create",{...profil, mdp: hmdp}).then(()=>navigation.navigate("Structure"))
+          await axios.post("http://localhost:3000/accueil/create/entreprise",{...profil, mdp: hmdp}).then(()=>navigation.navigate("StructureEntreprise"))
         }
         
 

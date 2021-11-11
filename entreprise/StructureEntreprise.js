@@ -6,7 +6,7 @@ import Profil from './pages/Profil';
 import Commandes from './pages/Commandes';
 import Menu from './pages/Menu'
 const Stack = createMaterialBottomTabNavigator();
-const Structure=()=>{
+const StructureEntreprise=()=>{
   return (
       <Stack.Navigator>
         <Stack.Screen name="Commandes" component={Commandes} />
@@ -15,5 +15,5 @@ const Structure=()=>{
       </Stack.Navigator>
   );
 }
-export default Structure
+export default StructureEntreprise
 
