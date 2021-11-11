@@ -12,7 +12,6 @@ import styles from './styles';
 const Stack = createNativeStackNavigator();
 const App=()=> {
   return (
-    <View>
     <NavigationContainer>
       <Stack.Navigator>
       <Stack.Screen name="MenuClient" component={MenuClient}/>
@@ -24,7 +23,6 @@ const App=()=> {
       
       </Stack.Navigator>
     </NavigationContainer>    
-    </View>
   );
 }
 
