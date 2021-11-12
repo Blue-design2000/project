@@ -20,17 +20,18 @@ function uniqueID() {
 wss.on('connection', function connection(ws) {
   ws.on('message', function incoming(message) {
     let clairMessage= JSON.parse(message.toString());
-    console.log(clairMessage.nature)
+    console.log("clairmessage",clairMessage)
     if(clairMessage.nature=="init"){// si c'est le message de connexion on enregistre le restaurant 
-      sql.query('SELECT * FROM commande WHERE idrest=\''+clairMessage.idrest+'\' and state<3',(err, res)=> {
+      sql.query('SELECT * FROM commande WHERE idrest=\''+clairMessage.idrest+'\' and state<3 and state>-1',(err, res)=> {
         console.log("data",res)
       ws.send(JSON.stringify({nature:"data",commandes:res}))})
       idrest[clairMessage.uid]=clairMessage.idrest
     }else if(clairMessage.nature=="etat"){// si il envoie pour changer l'etat on envoie a tous les gens du restau et on change dans la BDD 
-      let filtered = Object.fromEntries(Object.entries(id).filter(([k,v]) => v[1]==clairMessage.idrest));// on prend tous les gens qui ont le meme id que l'envoyeur
-      Object.keys(filtered).forEach((x)=>id[x][0].send(JSON.toString({nature:"etat",id: clairMessage.id,etat:changeState[+1==clairMessage.etat]+1})))// on envoie le changement a tout le monde
-      let changeState=["+","-"]
-      sql.query("UPDATE commande SET state=state"+changeState[+1==clairMessage.etat]+"1 WHERE idrest='"+clairMessage.idrest+"'",(err, res) => {
+      let filtered = Object.fromEntries(Object.entries(idrest).filter(([k,v]) => v[1]==clairMessage.id));// on prend tous les gens qui ont le meme id que l'envoyeur
+      Object.keys(filtered).forEach((x)=>idrest[x][0].send(JSON.toString({nature:"etat",id: clairMessage.idrest,etat:changeState[+1==clairMessage.etat]+1})))// on envoie le changement a tout le monde
+      let changeState=["-","+"]
+      console.log("UPDATE commande SET state=state"+changeState[+(1==clairMessage.etat)]+"1 WHERE id='"+clairMessage.id+"'")
+      sql.query("UPDATE commande SET state=state"+changeState[+(1==clairMessage.etat)]+"1 WHERE id='"+clairMessage.id+"'",(err, res) => {
         if (err) {
         console.log("error: ", err);
         res.send(err);
