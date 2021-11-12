@@ -1,6 +1,7 @@
 import React from 'react';
 import {View, Text, TouchableOpacity} from 'react-native';
 import { useRoute } from '@react-navigation/native';
+import axios from "axios";
 const Panier =()=>{
     const route = useRoute/*<RouteProp<ParamList, 'Detail'>>*/();
     console.log(route.params.menu)
@@ -51,7 +52,7 @@ return (
                 
         {route.params.menu.map((z)=>{Recursive(z[0][1])})}
         {CouscousRoyal()}
-        
+        <TouchableOpacity>Commander</TouchableOpacity>
     </View>
 )}
 export default Panier;
