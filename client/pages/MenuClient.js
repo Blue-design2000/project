@@ -3,10 +3,11 @@ import { Text, View, TextInput, TouchableOpacity } from 'react-native';
 import axios from "axios";
 import { useRoute } from '@react-navigation/native';
 import { SHA3 } from 'sha3';
+import { useNavigation } from '@react-navigation/native';
 import List from "./menu/List"
-
-const Connexion=()=> {
-  const [classe, setClasse] = useState({tree:{children:[]}});
+const MenuClient=()=>{
+const navigation = useNavigation();
+const [classe, setClasse] = useState({tree:{children:[]}});
   const [ajout,setAjout]=useState({max:0,min:0,name:"",parent:-1})
   const route = useRoute/*<RouteProp<ParamList, 'Detail'>>*/();
   let state/*: State*/;
@@ -15,8 +16,10 @@ const Connexion=()=> {
   
    React.useEffect(() => {
     console.log("USE EFFECT")
-    axios.get('http://localhost:3000/menu/get/e@e.fr')
+    axios.get('http://localhost:3000/menu/get/b@b.fr')
       .then((response) => {
+        console.log(route.params)
+    console.log('MENUU',state.menu)
         if (route.params === undefined || route.params.menu === undefined) {
           if (route.params === undefined || route.params.selected === undefined) {
             state = { menu: [], selected: [] };
@@ -36,8 +39,12 @@ const Connexion=()=> {
           setClasse({...classe,...response.data})
         }
         console.log(classe)
+        
+    console.log('MENUU',state.menu)
       });
    }, []);
+   
+   console.log('MENUUR',route.params)
   if (route.params === undefined || route.params.menu === undefined) {
     if (route.params === undefined || route.params.selected === undefined) {
       state = { menu: [], selected: [] };
@@ -61,6 +68,8 @@ const Connexion=()=> {
     });
     return objets;
   };
+
+  console.log('MENUU',state.menu)
   const nested = (value/*:[string, number]*/, objets/*:MenuNode*/) => {
     console.log(value, objets.children);
     if (objets.children.map((x) => x.name).includes(value[0])) {
@@ -89,47 +98,45 @@ const Connexion=()=> {
   const setData = (elem /*:string[][]*/, ajouter/*:number*/) => {
     console.log(elem);
     console.log(ajouter);
-    console.log(state)
+    console.log('MENUU',state.menu)
     if (ajouter === 1) {
+      console.log('MENUU',state.menu)
       elem.forEach((x) => state.selected.push(x));
+      console.log('MENUU',state.menu)
     } else {
+      console.log('MENUU',state.menu)
       elem.forEach((x) => state.selected.splice(state.selected.indexOf(x)));
+      console.log('MENUU',state.menu)
     }
-    console.log(state.selected);
+    console.log('MENUU',state.menu)
   };
+  const Update=(selected,node)=>{
+    navigation.push('MenuClient', { menu: state.menu, selected, node })             
+  }
   console.log(classe)
   return (
     <View>
-      <List node={classe.tree} setData={setData}/>
-      <TextInput
-      value = {ajout.max}
-      placeholder = "max"
-      onChangeText = {(max)=>setAjout({...ajout,max:max})}
-      />
-      <TextInput
-      value = {ajout.min}
-      placeholder = "min"
-      onChangeText = {(min)=>setAjout({...ajout,min:min})}
-      />
-      <TextInput
-      value = {ajout.nom}
-      placeholder = "nom"
-      onChangeText = {(nom)=>setAjout({...ajout,nom:nom})}
-      />
-      <TextInput
-      value = {ajout.parent}
-      placeholder = "parent"
-      onChangeText = {(parent)=>setAjout({...ajout,parent:parent})}
-      />
-
-      <TouchableOpacity onPress={async () => {
-        axios.post("localhost:3000/menu/add",{...ajout})}}>
+      <List menu={state.menu} node={classe.tree} setData={{setData,Update}}/>
+      <TouchableOpacity onPress={ () => {
+        console.log(valide && state.menu !== undefined , state.menu);
+           if (valide && state.menu !== undefined) {	
+                      state.menu.push(state.selected);	
+                      // console.log(state.menu);	
+                      state.selected = [];	
+                      // menu: state.menu.push(state.selected)	
+                      // this.setState({ selected: [] }, () => { console.log(`state${state.menu}`); });	
+                     Update([],undefined)
+                      console.log(state.menu);	
+                    } else {	
+                      Alert.alert("vous n'avez pas bien rempli");	
+                    }}}>
         <Text>ajouter un menu/produit</Text>
       </TouchableOpacity>
+      <TouchableOpacity  onPress={() => {navigation.navigate('Panier', {menu: state.menu})}}>
+        <Text>Panier</Text>
+      </TouchableOpacity>
+      
 
        </View>
   );}
-
-
-
-export default Connexion;
+export default MenuClient
