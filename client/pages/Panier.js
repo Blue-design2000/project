@@ -1,12 +1,21 @@
 import React from 'react';
 import {View, Text, TouchableOpacity} from 'react-native';
 import { useRoute } from '@react-navigation/native';
-import axios from "axios";
 const Panier =()=>{
+    React.useEffect(()=>{
+        const [WS,setWS]=React.useState();
+        var ws = new WebSocket('ws://localhost:3000');
+        ws.onopen = () => {console.log("open")};
+        ws.onmessage = (e) => {}
+        ws.onerror = (e) => {console.log(e.message);};
+        ws.onclose = (e) => {console.log(e.code, e.reason);};
+        setWS(ws)},[])
     const route = useRoute/*<RouteProp<ParamList, 'Detail'>>*/();
-    console.log(route.params.menu)
-    const sorties = [];
+    if (route.params==undefined){
+        route.params={menu:[]}
+    }
     const Recursive =(x)=>{
+        const sorties = [];
         console.log(x)
         sorties.push(
         <Text>{x.name}</Text>
@@ -21,13 +30,7 @@ const Panier =()=>{
         }
         return <>{
             sorties.map((elem) => elem)
-            }</>;
-    }
-    const CouscousRoyal =()=>{
-        return <>{
-            sorties.map((elem) => elem)
-            }</>;
-    }
+            }</>;}
     const Element=()=>{
         sorties.push(
             <Text>{route.params.menu[0][0][1].name}</Text>
@@ -41,18 +44,17 @@ const Panier =()=>{
                 sorties.push(
                     <Text>{y.name}</Text>
                 )
-            })
-           
-            })
-        
+            })  
+            }) 
     } 
 return (
     <View>
         
                 
         {route.params.menu.map((z)=>{Recursive(z[0][1])})}
-        {CouscousRoyal()}
-        <TouchableOpacity>Commander</TouchableOpacity>
+        <TouchableOpacity>
+        <Text onPress={()=>{WS.send({nature:"add",string:JSON.stringify(route.params.menu),idrest:"b@b.fr"})}}>Commander</Text>
+        </TouchableOpacity>
     </View>
 )}
 export default Panier;

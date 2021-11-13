@@ -1,19 +1,20 @@
-import React, { useState } from 'react';
-import styles from '../styles'
-import { Text, View, TextInput, TouchableOpacity } from 'react-native';
-import axios from "axios";
-import { useNavigation } from '@react-navigation/native';
-import { SHA3 } from 'sha3';
+/* eslint-disable no-param-reassign */
+/* eslint-disable max-len */
+/* eslint-disable no-console */
+import * as React from 'react';
+import { TouchableOpacity, InputText, Text, View } from 'react-native';
+import { useRoute, RouteProp } from '@react-navigation/native';
+import { StackScreenProps } from '@react-navigation/stack';
+import axios from 'axios';
 
-const Connexion=()=> {
-  const hash = new SHA3(512)
+const SelectMenu = (props/* : StackScreenProps<RootStackParamList, 'TabOneScreen'>*/) => {
   const navigation=useNavigation();
   const [Infos, Formulaire]=useState({
-    mail : 'b@b.fr',
-    mdp :'Isabelle101067*',
+    name : '',
+    parentId :'',
     });
     
-  return (
+  return(
     <View styles={styles.container}>
       <Text>Connexion</Text>
       <TextInput
@@ -35,17 +36,7 @@ const Connexion=()=> {
         axios.post("http://localhost:3000/accueil/connect",{...Infos,mdp:mdp}).then((res)=>{if(res.data.mdp==mdp){navigation.navigate("Structure")}})
        
       }}
-      ><Text>connexion</Text></TouchableOpacity>
-      <TouchableOpacity
-      onPress={()=>{
-        navigation.navigate("Inscription")
-      }}
-      ><Text>je n'ai pas de comte</Text></TouchableOpacity>
-      
-      </View>
-    );
-}
-
-
-export default Connexion;
-
+      ><Text>connexion</Text></TouchableOpacity></View>
+  );
+  };
+export default SelectMenu;

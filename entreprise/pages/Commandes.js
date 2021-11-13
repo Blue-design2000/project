@@ -4,6 +4,23 @@ import { Text, View , TouchableOpacity } from 'react-native';
 import {ListItem} from 'react-native-elements';
 import axios from 'axios';
 const Commandes=()=> {
+  const Recursive =(x)=>{
+    const sorties = [];
+    console.log(x)
+    sorties.push(
+    <Text>{x.name}</Text>
+    )
+    if (x.children==[]){
+        console.log("il n'y a plus de childrens");
+    }
+    else{
+      x.children.map((y)=>{
+          Recursive(y);
+      })  
+    }
+    return <>{
+        sorties.map((elem) => elem)
+        }</>;}
 const [uid,setUid]=React.useState("") //TODO : utiliser uid 
 const [commandes, setCommandes]=React.useState([[],[],[]])
 const [WS,setWS]=React.useState();
@@ -15,7 +32,7 @@ React.useEffect(()=>{
     console.log(data)
     console.log(data.nature=='init', data.nature);
     if(data.nature=="init"){  
-      ws.send("{\"nature\":\"init\",\"idrest\":\"e@e.fr\", \"uid\":\""+data.id+"\"}")// on envoie l'id du restaurant au serveur 
+      ws.send("{\"nature\":\"init\",\"idrest\":\"b@b.fr\", \"uid\":\""+data.id+"\"}")// on envoie l'id du restaurant au serveur 
       setUid(data.id)// one enrgistre notre uid
     }else if(data.nature=="data"){//si on est entrian d'initialiser 
       console.log("coucou23");
@@ -48,7 +65,7 @@ React.useEffect(()=>{
       return(
       <ListItem key={i} bottomDivider>
         <ListItem.Content>
-          <ListItem.Title>{l.string}</ListItem.Title>
+          <ListItem.Title>{Recursive(commandes[0])}</ListItem.Title>
            <ListItem.Subtitle>
             <TouchableOpacity onPress={()=>{let Commandes=[];commandes.map((i)=>Commandes.push(i));WS.send(JSON.stringify({nature:"etat",id:l.id,etat:"+1"}));Commandes[1].push(Commandes[0].splice(i,i+1)[0]);console.log(Commandes);setCommandes(Commandes)}}><Text>Monter</Text></TouchableOpacity>
             <TouchableOpacity onPress={()=>{let Commandes=[];commandes.map((i)=>Commandes.push(i));WS.send(JSON.stringify({nature:"etat",id:l.id,etat:"-1"}));Commandes[0].splice(i,i+1)[0];console.log(Commandes);setCommandes(Commandes)}}><Text>Descendre</Text></TouchableOpacity>
@@ -63,7 +80,7 @@ React.useEffect(()=>{
      commandes[1].map((l, i) => (
       <ListItem key={i} bottomDivider>
         <ListItem.Content>
-          <ListItem.Title>{l.string}</ListItem.Title>
+          <ListItem.Title>{Recursive(commandes[1])}</ListItem.Title>
           <ListItem.Subtitle>
             <TouchableOpacity onPress={()=>{let Commandes=[];commandes.map((i)=>Commandes.push(i));WS.send(JSON.stringify({nature:"etat",id:l.id,etat:"+1"}));Commandes[2].push(Commandes[1].splice(i,i+1)[0]);console.log(Commandes);setCommandes(Commandes)}}><Text>Monter</Text></TouchableOpacity>
             <TouchableOpacity onPress={()=>{let Commandes=[];commandes.map((i)=>Commandes.push(i));WS.send(JSON.stringify({nature:"etat",id:l.id,etat:"-1"}));Commandes[0].push(Commandes[1].splice(i,i+1)[0]);console.log(Commandes);setCommandes(Commandes)}}><Text>Descendre</Text></TouchableOpacity>
@@ -77,7 +94,7 @@ React.useEffect(()=>{
     commandes[2].map((l, i) => (
       <ListItem key={i} bottomDivider>
         <ListItem.Content>
-          <ListItem.Title>{l.string}</ListItem.Title>
+          <ListItem.Title>{Recursive(commandes[2])}</ListItem.Title>
           <ListItem.Subtitle>
             <TouchableOpacity onPress={()=>{let Commandes=[];commandes.map((i)=>Commandes.push(i));WS.send(JSON.stringify({nature:"etat",id:l.id,etat:"+1"}));Commandes[2].splice(i,i+1)[0];console.log(Commandes);setCommandes(Commandes)}}><Text>Monter</Text></TouchableOpacity>
           <TouchableOpacity onPress={()=>{let Commandes=[];commandes.map((i)=>Commandes.push(i));WS.send(JSON.stringify({nature:"etat",id:l.id,etat:"-1"}));Commandes[1].push(Commandes[2].splice(i,i+1)[0]);console.log(Commandes);setCommandes(Commandes)}}><Text>Descendre</Text></TouchableOpacity>

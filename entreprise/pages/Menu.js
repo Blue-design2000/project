@@ -15,7 +15,7 @@ const Connexion=()=> {
   
    React.useEffect(() => {
     console.log("USE EFFECT")
-    axios.get('http://localhost:3000/menu/get/e@e.fr')
+    axios.get('http://localhost:3000/menu/get/b@b.fr')
       .then((response) => {
         if (route.params === undefined || route.params.menu === undefined) {
           if (route.params === undefined || route.params.selected === undefined) {
