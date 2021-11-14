@@ -40,7 +40,7 @@ wss.on('connection', function connection(ws) {
     }else if (clairMessage.nature=="add"){// si c'est pour enregistrer un nouveau menu on envoie a tout le monde et dans la bdd 
       let filtered = Object.fromEntries(Object.entries(idrest).filter(([k,v]) => v==clairMessage.idrest));
       Object.keys(filtered).forEach((x)=>socket[x].send(JSON.toString({nature:"add",string:clairMessage.string})))
-      sql.query("INSERT INTO commande SET ?",clairMessage.data,(err, res) => {
+      sql.query("INSERT INTO commande SET ?",{idclient:clairMessage.idclient,string:clairMessage.string,idrest:clairMessage.idrest},(err, res) => {
         if (err) {
         console.log("error: ", err);
         res.send(err);

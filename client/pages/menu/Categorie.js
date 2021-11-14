@@ -47,7 +47,7 @@ const Categorie = (props/*: PropsCat*/) => {
   return (
     <View>
       <SelectMultiple
-        items={props.node.children.map((y) => y.name)} // en mettant les cles des enfants
+        items={props.node.children.map((y) => y.name+"(+"+y.price+"€)")} // en mettant les cles des enfants
         selectedItems={selection}
         onSelectionsChange={onSelectionChange}
       />

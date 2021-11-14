@@ -4,10 +4,15 @@ import axios from "axios";
 import { useRoute } from '@react-navigation/native';
 import { SHA3 } from 'sha3';
 import List from "./menu/List"
-
-const Connexion=()=> {
-  const [classe, setClasse] = useState({tree:{children:[]}});
-  const [ajout,setAjout]=useState({max:0,min:0,name:"",parent:-1})
+import {Picker} from '@react-native-picker/picker';
+const Menu=()=> {
+  return (
+      <Stack.Navigator>    
+      <Stack.Screen name="Menu" component={Choix} options={{headerShown: false}}/>
+      <Stack.Screen name="Panier" component={Panier} options={{headerShown: false}}/>
+      </Stack.Navigator>)}
+const Choix=()=>{ const [classe, setClasse] = useState({list:[],tree:{children:[]}});
+  const [ajout,setAjout]=useState({max:"1",min:"0",name:"canette",parentId:[6,"pepsi"],type:["produit","produit"],description:"canette de 33cl",price:"0.00"})
   const route = useRoute/*<RouteProp<ParamList, 'Detail'>>*/();
   let state/*: State*/;
   let valide = (1 === 1.0);
@@ -15,7 +20,7 @@ const Connexion=()=> {
   
    React.useEffect(() => {
     console.log("USE EFFECT")
-    axios.get('http://localhost:3000/menu/get/b@b.fr')
+    axios.get('http://localhost:3000/menu/get/e@e.fr')
       .then((response) => {
         if (route.params === undefined || route.params.menu === undefined) {
           if (route.params === undefined || route.params.selected === undefined) {
@@ -97,33 +102,63 @@ const Connexion=()=> {
     }
     console.log(state.selected);
   };
-  console.log(classe)
+  const Items=(list)=>{console.log(list); let sortie=list.map((x)=><Picker.Item label={x[1]} value={x} />)
+  return <>{
+      sortie.map((elem) => elem)
+      }</>}
+  console.log(classe.list)
   return (
     <View>
       <List node={classe.tree} setData={setData}/>
+      <TextInput
+      value = {ajout.price}
+      placeholder = "price"
+      onChangeText = {(price)=>setAjout({...ajout,price})}
+      />
       <TextInput
       value = {ajout.max}
       placeholder = "max"
       onChangeText = {(max)=>setAjout({...ajout,max:max})}
       />
+      
       <TextInput
       value = {ajout.min}
       placeholder = "min"
       onChangeText = {(min)=>setAjout({...ajout,min:min})}
       />
       <TextInput
-      value = {ajout.nom}
-      placeholder = "nom"
-      onChangeText = {(nom)=>setAjout({...ajout,nom:nom})}
-      />
-      <TextInput
-      value = {ajout.parent}
-      placeholder = "parent"
-      onChangeText = {(parent)=>setAjout({...ajout,parent:parent})}
-      />
-
-      <TouchableOpacity onPress={async () => {
-        axios.post("localhost:3000/menu/add",{...ajout})}}>
+      value = {ajout.name}
+      placeholder = "name"
+      onChangeText = {(name)=>setAjout({...ajout,name})}
+      />      
+      <Picker
+  selectedValue={ajout.parentId}
+  onValueChange={(parentId,index) =>{
+    setAjout({...ajout,parentId})
+  }
+  }>
+    {Items(classe.list)}
+</Picker>
+      <Picker
+  selectedValue={ajout.type}
+  onValueChange={(type, index) =>{setAjout({...ajout,type})}}>
+    {Items([["menu","menu"],["categorie","categorie"],["produit","produit"]])}
+</Picker>
+<TextInput
+      multiline
+      numberOfLines={4}
+      onChangeText={description => setAjout({...ajout,description})}
+      value={ajout.description}
+      style={{padding: 10}}
+      placeholder="description"
+      editable
+      maxLength={40}
+    />
+      <TouchableOpacity onPress={() => {
+        console.log(ajout)
+        if(ajout.max>0 && ajout.name.length>3&& ajout.max>ajout.min){
+          console.log({...ajout,parentId:ajout.parentId[0]})
+        axios.post("http://localhost:3000/menu/add",{...ajout,type:ajout.type[0],parentId:ajout.parentId[0],mail:'e@e.fr'})}}}>
         <Text>ajouter un menu/produit</Text>
       </TouchableOpacity>
 
@@ -132,4 +167,4 @@ const Connexion=()=> {
 
 
 
-export default Connexion;
+export default Menu;

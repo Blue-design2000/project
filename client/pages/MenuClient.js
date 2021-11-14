@@ -5,7 +5,16 @@ import { useRoute } from '@react-navigation/native';
 import { SHA3 } from 'sha3';
 import { useNavigation } from '@react-navigation/native';
 import List from "./menu/List"
-const MenuClient=()=>{
+import Panier from "./Panier";
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+const Stack = createNativeStackNavigator();
+const MenuClient=()=> {
+  return (
+      <Stack.Navigator>    
+      <Stack.Screen name="Menu" component={Choix} options={{headerShown: false}}/>
+      <Stack.Screen name="Panier" component={Panier} options={{headerShown: false}}/>
+      </Stack.Navigator>)}
+const Choix=()=>{
 const navigation = useNavigation();
 const [classe, setClasse] = useState({tree:{children:[]}});
   const [ajout,setAjout]=useState({max:0,min:0,name:"",parent:-1})
@@ -16,7 +25,7 @@ const [classe, setClasse] = useState({tree:{children:[]}});
   
    React.useEffect(() => {
     console.log("USE EFFECT")
-    axios.get('http://localhost:3000/menu/get/b@b.fr')
+    axios.get('http://localhost:3000/menu/get/e@e.fr')
       .then((response) => {
         console.log(route.params)
     console.log('MENUU',state.menu)
@@ -111,7 +120,7 @@ const [classe, setClasse] = useState({tree:{children:[]}});
     console.log('MENUU',state.menu)
   };
   const Update=(selected,node)=>{
-    navigation.push('MenuClient', { menu: state.menu, selected, node })             
+    navigation.push('Menu', { menu: state.menu, selected, node })             
   }
   console.log(classe)
   return (
@@ -131,6 +140,9 @@ const [classe, setClasse] = useState({tree:{children:[]}});
                       Alert.alert("vous n'avez pas bien rempli");	
                     }}}>
         <Text>ajouter un menu/produit</Text>
+      </TouchableOpacity>
+      <TouchableOpacity  onPress={() => {Update([],undefined)}}>
+        <Text>Annuler ma commande</Text>
       </TouchableOpacity>
       <TouchableOpacity  onPress={() => {navigation.navigate('Panier', {menu: state.menu})}}>
         <Text>Panier</Text>

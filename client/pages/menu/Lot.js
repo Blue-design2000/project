@@ -21,7 +21,7 @@ function Lot(props/*:PropsLot*/) {
           props.setData.Update([parent],props.node)
       }}}>
       <Text>
-        {props.parent[props.parent.length - 1].name}
+        {props.parent[props.parent.length - 1].name+"("+props.parent[props.parent.length - 1].price+"€)"}
       </Text>
       </TouchableOpacity>
       </View>);

@@ -9,7 +9,7 @@ const Connexion=()=> {
   const hash = new SHA3(512)
   const navigation=useNavigation();
   const [Infos, Formulaire]=useState({
-    mail : 'b@b.fr',
+    mail : 'e@e.fr',
     mdp :'Isabelle101067*',
     });
     
@@ -32,7 +32,8 @@ const Connexion=()=> {
     hash.update(Infos.mdp)
     let mdp=hash.digest("hex")
     console.log({...Infos,mdp:mdp})
-        axios.post("http://localhost:3000/accueil/connect",{...Infos,mdp:mdp}).then((res)=>{if(res.data.mdp==mdp){navigation.navigate("Structure")}})
+        axios.post("http://localhost:3000/accueil/connect",{...Infos,mdp:mdp}).then((res)=>{if(res.data.mdp==mdp){React.createContext({mail:Infos.mail});
+        navigation.navigate("Structure")}})
        
       }}
       ><Text>connexion</Text></TouchableOpacity>

@@ -1,9 +1,11 @@
 import React from 'react';
 import {View, Text, TouchableOpacity} from 'react-native';
 import { useRoute } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/core';
 const Panier =()=>{
+    const navigation=useNavigation();
+    const [WS,setWS]=React.useState();
     React.useEffect(()=>{
-        const [WS,setWS]=React.useState();
         var ws = new WebSocket('ws://localhost:3000');
         ws.onopen = () => {console.log("open")};
         ws.onmessage = (e) => {}
@@ -17,6 +19,7 @@ const Panier =()=>{
     const Recursive =(x)=>{
         const sorties = [];
         console.log(x)
+        console.log(x.name)
         sorties.push(
         <Text>{x.name}</Text>
         )
@@ -24,36 +27,20 @@ const Panier =()=>{
             console.log("il n'y a plus de childrens");
         }
         else{
-          x.children.map((y)=>{
-              Recursive(y);
-          })  
+          sorties.push(x.children.map((y)=>Recursive(y)));
         }
         return <>{
             sorties.map((elem) => elem)
             }</>;}
-    const Element=()=>{
-        sorties.push(
-            <Text>{route.params.menu[0][0][1].name}</Text>
-        )
-        route.params.menu[0][0][1].children.map((x)=>{
-            sorties.push(
-                <Text>{x.name}</Text>
-            )
-
-            x.children.map((y)=>{
-                sorties.push(
-                    <Text>{y.name}</Text>
-                )
-            })  
-            }) 
-    } 
 return (
     <View>
-        
-                
-        {route.params.menu.map((z)=>{Recursive(z[0][1])})}
-        <TouchableOpacity>
-        <Text onPress={()=>{WS.send({nature:"add",string:JSON.stringify(route.params.menu),idrest:"b@b.fr"})}}>Commander</Text>
+        {route.params.menu.map((z)=>{return Recursive(z[0][1])})}
+        <TouchableOpacity onPress={()=>{
+            WS.send(JSON.stringify({nature:"add",idclient:'e@e.fr',string:JSON.stringify(route.params.menu),idrest:"e@e.fr"}));
+            navigation.navigate("Menu")}}>
+                <Text>Commander</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={()=>{navigation.navigate("Menu")}}><Text>vider mon panier</Text>
         </TouchableOpacity>
     </View>
 )}

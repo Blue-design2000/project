@@ -3,7 +3,6 @@ import * as React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import Lot from './Lot';
 import Cat from './Categorie';
-import { NavigationContainerRefContext } from '@react-navigation/core';
 import axios from 'axios';
 // import {
 //   MenuLot, MenuLotCategory, MenuMotherCategory,
@@ -37,7 +36,7 @@ const List = (prop/*:PropsList*/) => {
         // console.log("c'est une categorie de lot");
 
           const filsLotCat = (nodeElement)// as MenuLotCategory);
-          sortie.push(<View ><Text>{nodeElement.name} max:{filsLotCat.max} min: {filsLotCat.min}</Text><Cat node={filsLotCat} parent={nodeElement.name} setData={props.setData}/>
+          sortie.push(<View ><Text>{nodeElement.name+'('+nodeElement.price+"€)"} max:{filsLotCat.max} min: {filsLotCat.min}</Text><Cat node={filsLotCat} parent={nodeElement.name} setData={props.setData}/>
           <TouchableOpacity
             onPress={()=>{axios.post("http://localhost:3000/menu/activate",{id:nodeElement.id,actif: nodeElement.actif})}}><Text>{nodeElement.actif==0?"activer":"desactiver"} la categorie {nodeElement.name}</Text>
             </TouchableOpacity>

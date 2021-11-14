@@ -10,13 +10,11 @@ const Commandes=()=> {
     sorties.push(
     <Text>{x.name}</Text>
     )
-    if (x.children==[]){
+    if (x.children==undefined){
         console.log("il n'y a plus de childrens");
     }
     else{
-      x.children.map((y)=>{
-          Recursive(y);
-      })  
+      sorties.push(x.children.map((y)=>Recursive(y)))  
     }
     return <>{
         sorties.map((elem) => elem)
@@ -32,7 +30,7 @@ React.useEffect(()=>{
     console.log(data)
     console.log(data.nature=='init', data.nature);
     if(data.nature=="init"){  
-      ws.send("{\"nature\":\"init\",\"idrest\":\"b@b.fr\", \"uid\":\""+data.id+"\"}")// on envoie l'id du restaurant au serveur 
+      ws.send("{\"nature\":\"init\",\"idrest\":\"e@e.fr\", \"uid\":\""+data.id+"\"}")// on envoie l'id du restaurant au serveur 
       setUid(data.id)// one enrgistre notre uid
     }else if(data.nature=="data"){//si on est entrian d'initialiser 
       console.log("coucou23");
@@ -57,15 +55,15 @@ React.useEffect(()=>{
   ws.onclose = (e) => {console.log(e.code, e.reason);};
   setWS(ws)
 },[]);
-
+console.log(commandes)
   return (
     <View>
-      <Text>Commandes {JSON.stringify(commandes)}</Text>
+      <Text>Commandes</Text>
       {commandes[0].map((l, i) => {console.log(l.string,typeof l);
       return(
       <ListItem key={i} bottomDivider>
         <ListItem.Content>
-          <ListItem.Title>{Recursive(commandes[0])}</ListItem.Title>
+          <ListItem.Title><View>{Recursive(JSON.parse(commandes[0][0].string)[0][0][1])}</View></ListItem.Title>
            <ListItem.Subtitle>
             <TouchableOpacity onPress={()=>{let Commandes=[];commandes.map((i)=>Commandes.push(i));WS.send(JSON.stringify({nature:"etat",id:l.id,etat:"+1"}));Commandes[1].push(Commandes[0].splice(i,i+1)[0]);console.log(Commandes);setCommandes(Commandes)}}><Text>Monter</Text></TouchableOpacity>
             <TouchableOpacity onPress={()=>{let Commandes=[];commandes.map((i)=>Commandes.push(i));WS.send(JSON.stringify({nature:"etat",id:l.id,etat:"-1"}));Commandes[0].splice(i,i+1)[0];console.log(Commandes);setCommandes(Commandes)}}><Text>Descendre</Text></TouchableOpacity>
@@ -73,14 +71,12 @@ React.useEffect(()=>{
         </ListItem.Content> 
       </ListItem>
     )})
-    }
-    <Text>{JSON.stringify(commandes)}</Text>
-    <Text>en cours </Text>
+    }<Text>en cours </Text>
         {
      commandes[1].map((l, i) => (
       <ListItem key={i} bottomDivider>
         <ListItem.Content>
-          <ListItem.Title>{Recursive(commandes[1])}</ListItem.Title>
+        <ListItem.Title>{Recursive(JSON.parse(commandes[1][0].string)[0][0][1])}</ListItem.Title>
           <ListItem.Subtitle>
             <TouchableOpacity onPress={()=>{let Commandes=[];commandes.map((i)=>Commandes.push(i));WS.send(JSON.stringify({nature:"etat",id:l.id,etat:"+1"}));Commandes[2].push(Commandes[1].splice(i,i+1)[0]);console.log(Commandes);setCommandes(Commandes)}}><Text>Monter</Text></TouchableOpacity>
             <TouchableOpacity onPress={()=>{let Commandes=[];commandes.map((i)=>Commandes.push(i));WS.send(JSON.stringify({nature:"etat",id:l.id,etat:"-1"}));Commandes[0].push(Commandes[1].splice(i,i+1)[0]);console.log(Commandes);setCommandes(Commandes)}}><Text>Descendre</Text></TouchableOpacity>
@@ -94,7 +90,7 @@ React.useEffect(()=>{
     commandes[2].map((l, i) => (
       <ListItem key={i} bottomDivider>
         <ListItem.Content>
-          <ListItem.Title>{Recursive(commandes[2])}</ListItem.Title>
+        <ListItem.Title>{Recursive(JSON.parse(commandes[2][0].string)[0][0][1])}</ListItem.Title>
           <ListItem.Subtitle>
             <TouchableOpacity onPress={()=>{let Commandes=[];commandes.map((i)=>Commandes.push(i));WS.send(JSON.stringify({nature:"etat",id:l.id,etat:"+1"}));Commandes[2].splice(i,i+1)[0];console.log(Commandes);setCommandes(Commandes)}}><Text>Monter</Text></TouchableOpacity>
           <TouchableOpacity onPress={()=>{let Commandes=[];commandes.map((i)=>Commandes.push(i));WS.send(JSON.stringify({nature:"etat",id:l.id,etat:"-1"}));Commandes[1].push(Commandes[2].splice(i,i+1)[0]);console.log(Commandes);setCommandes(Commandes)}}><Text>Descendre</Text></TouchableOpacity>

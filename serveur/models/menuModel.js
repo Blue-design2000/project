@@ -8,7 +8,8 @@ const Menu = function(menu) {
 };
 
 Menu.create = (req, res) => {
-  sql.query("INSERT INTO menu SET ?", req.query, (err, response) => {
+  console.log(req)
+  sql.query("INSERT INTO menu SET ?", req.body, (err, response) => {
     if (err) {
       console.log("error: ", err);
       res.send(err, null);
@@ -54,8 +55,10 @@ Menu.findById = (req, res) => {
       return;
     }
     if (response.length) {
-      console.log("found menu: ");
-      menu=arbre(response)
+      let picker=[]
+      response.forEach((x)=>picker.push([x.id,x.name]))
+      console.log("found menu: ",response,picker);
+      let menu=arbre(response)
       res.send(menu);
       return;
     }

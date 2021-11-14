@@ -31,7 +31,7 @@ const List = (prop/*:PropsList*/) => {
         // console.log("c'est une categorie de lot");
 
           const filsLotCat = (nodeElement)// as MenuLotCategory);
-          sortie.push(<View ><Text>{nodeElement.name} max:{filsLotCat.max} min: {filsLotCat.min}</Text><Cat node={filsLotCat} parent={nodeElement.name} setData={props.setData}/>
+          sortie.push(<View ><Text>{nodeElement.name+"("+nodeElement.price+"€)"} max:{filsLotCat.max} min: {filsLotCat.min}</Text><Cat node={filsLotCat} parent={nodeElement.name} setData={props.setData}/>
 
 </View>);
         }
